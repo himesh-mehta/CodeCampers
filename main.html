@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Farmer Field Advisor — Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-app text-slate-100 scroll-smooth">
+
+<!-- Header -->
+<header class="max-w-7xl mx-auto px-6 lg:px-10 pt-8">
+  <div class="flex items-center gap-3">
+    <svg width="40" height="40" viewBox="0 0 64 64" class="text-emerald-400">
+      <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#22c55e"/></linearGradient></defs>
+      <path fill="url(#g)" d="M54 10c-9 1-16 4-22 10S21 34 20 45c9 1 17-2 23-8s9-13 11-22z"/>
+      <path fill="#10b981" opacity=".7" d="M32 32c2 7-1 13-4 18-4 6-10 10-16 12 2-6 6-12 12-16 5-3 11-6 18-4-7-2-13 1-18 4-6 4-10 10-12 16 6-2 12-6 16-12 3-5 6-11 4-18z"/>
+    </svg>
+    <div>
+      <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">Farmer Field Advisor</h1>
+      <p class="text-emerald-300/90 text-sm">Smart crop choices, local tips, and a handy AI helper</p>
+    </div>
+  </div>
+</header>
+
+<!-- Main Layout -->
+<main class="max-w-7xl mx-auto px-6 lg:px-10 mt-8 mb-16">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <!-- Sidebar -->
+    <aside class="lg:col-span-1 glass rounded-2xl p-5 md:p-6 space-y-5 shadow">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-semibold">Your Field</h2>
+        <span class="badge rounded-full px-2.5 py-1 text-xs text-emerald-100">Setup</span>
+      </div>
+      <div class="space-y-3">
+        <label class="block text-sm text-slate-300">Region</label>
+        <select id="regionSelect" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2">
+          <option value="Deccan">Deccan Plateau</option>
+          <option value="IndoGangetic">Indo-Gangetic Plain</option>
+          <option value="Coastal">Coastal Belt</option>
+          <option value="SemiArid">Semi-Arid Zone</option>
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm text-slate-300">Soil</label>
+          <select id="soilSelect" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2">
+            <option value="Loam">Loam</option>
+            <option value="Clay">Clay</option>
+            <option value="Sandy">Sandy</option>
+            <option value="Black">Black</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-slate-300">Field Size</label>
+          <select id="sizeSelect" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2">
+            <option value="0.5">0.5 ha</option>
+            <option value="1" selected>1 ha</option>
+            <option value="2">2 ha</option>
+            <option value="5">5 ha</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm text-slate-300">Pick a spot</span>
+          <span id="spotLabel" class="text-xs text-emerald-300">Grid: B2</span>
+        </div>
+        <div id="miniMap" class="grid grid-cols-5 gap-2"></div>
+        <p class="text-xs text-slate-400 mt-2">This is a simple demo grid, not a real map.</p>
+      </div>
+      <button id="analyzeBtn" class="w-full btn rounded-xl py-3 font-semibold mt-2">Analyze Field</button>
+    </aside>
+
+    <!-- Main Content -->
+    <section class="lg:col-span-3 space-y-6">
+      <div class="grid sm:grid-cols-3 gap-4">
+        <div class="glass rounded-xl p-4">
+          <div class="text-xs uppercase tracking-wide text-slate-300">Recommended Crop</div>
+          <div id="cardCrop" class="text-xl mt-1 font-semibold text-emerald-300">—</div>
+          <div id="cardConfidence" class="text-xs text-slate-300 mt-1">Confidence: —</div>
+        </div>
+        <div class="glass rounded-xl p-4">
+          <div class="text-xs uppercase tracking-wide text-slate-300">Sowing Window</div>
+          <div id="cardWindow" class="text-xl mt-1 font-semibold text-emerald-300">—</div>
+          <div id="cardIrr" class="text-xs text-slate-300 mt-1">Irrigation: —</div>
+        </div>
+        <div class="glass rounded-xl p-4">
+          <div class="text-xs uppercase tracking-wide text-slate-300">Weather (Next 7d)</div>
+          <div id="cardWeather" class="text-xl mt-1 font-semibold text-emerald-300">—</div>
+          <div id="cardPest" class="text-xs text-slate-300 mt-1">Pest risk: —</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="glass rounded-2xl p-2 flex flex-wrap gap-2">
+        <button data-tab="recommendations" class="tabBtn tab-active rounded-xl px-4 py-2 border text-sm">Recommendations</button>
+        <button data-tab="irrigation" class="tabBtn rounded-xl px-4 py-2 border text-sm">Irrigation Planner</button>
+        <button data-tab="seeds" class="tabBtn rounded-xl px-4 py-2 border text-sm">Seed Calculator</button>
+        <button data-tab="market" class="tabBtn rounded-xl px-4 py-2 border text-sm">Market Prices</button>
+        <button data-tab="weather" class="tabBtn rounded-xl px-4 py-2 border text-sm">Weather</button>
+      </div>
+
+      <!-- Panels -->
+      <div id="panel-recommendations" class="glass rounded-2xl p-6 space-y-5">
+        <h3 class="text-xl font-semibold">Crop & Field Recommendations</h3>
+        <div id="recBody" class="space-y-3">
+          <p class="text-slate-300">Choose a region, soil, and spot, then click Analyze Field to see tailored advice.</p>
+        </div>
+      </div>
+      <div id="panel-irrigation" class="glass rounded-2xl p-6 space-y-4 hidden">
+        <h3 class="text-xl font-semibold">Irrigation Planner</h3>
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm text-slate-300">Crop Stage</label>
+            <select id="irrStage" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2">
+              <option value="early">Early</option>
+              <option value="mid" selected>Mid</option>
+              <option value="late">Late</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm text-slate-300">Soil Moisture</label>
+            <select id="irrMoist" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm text-slate-300">Field Size (ha)</label>
+            <input id="irrSize" type="number" step="0.1" min="0.1" value="1" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2">
+          </div>
+        </div>
+        <button id="irrCalc" class="btn rounded-lg px-4 py-2 font-semibold">Calculate Water</button>
+        <div id="irrOut" class="text-emerald-200 mt-3 text-sm">Enter your details to estimate irrigation.</div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

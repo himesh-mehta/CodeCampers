@@ -17,7 +17,7 @@
         .speaking { animation: pulse 1s infinite; }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .grid{padding-top: 25px;}
-        .chatboxpos{position: relative; top: 150px;}
+        .chatboxpos{position: relative; top: 0px;}
         
         /* === Integrated Chatbot CSS === */
         .msg {

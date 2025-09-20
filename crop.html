@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Agri-Advisor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .bg-gradient-green { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); }
+        .bg-gradient-earth { background: linear-gradient(135deg, #f3e8d3 0%, #e8d5b7 100%); }
+        .shadow-soft { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+        .animate-fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .hidden { display: none; }
+        .speaking { animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    </style>
+</head>
+<body class="bg-gradient-earth min-h-screen">
+    <!-- Mobile Container -->
+    <div class="max-w-sm mx-auto bg-white min-h-screen shadow-2xl relative overflow-hidden">
+        
+        <!-- Login/Signup Page -->
+        <div id="loginPage" class="page animate-fade-in">
+            <div class="bg-gradient-green h-64 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-20">
+                    <svg viewBox="0 0 400 200" class="w-full h-full">
+                        <path d="M0,100 Q100,50 200,100 T400,100 L400,200 L0,200 Z" fill="white"/>
+                    </svg>
+                </div>
+                <div class="relative z-10 pt-12 px-6 text-center">
+                    <div class="text-6xl mb-4">🌱</div>
+                    <h1 class="text-white text-2xl font-bold mb-2">Smart Agri-Advisor</h1>
+                    <p class="text-green-100 text-sm">Your Digital Farming Companion</p>
+                </div>
+            </div>
+            
+            <div class="px-6 py-8">
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Email / Mobile Number</label>
+                    <input type="text" id="loginEmail" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Enter email or mobile">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+                    <input type="password" id="loginPassword" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Enter password">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Preferred Language</label>
+                    <select id="languageSelect" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी (Hindi)</option>
+                        <option value="gu">ગુજરાતી (Gujarati)</option>
+                        <option value="mr">मराठी (Marathi)</option>
+                        <option value="te">తెలుగు (Telugu)</option>
+                        <option value="ta">தமிழ் (Tamil)</option>
+                    </select>
+                </div>
+                
+                <button onclick="login()" class="w-full bg-gradient-green text-white py-3 rounded-xl font-semibold shadow-soft hover:shadow-lg transition-all duration-300 mb-4">
+                    Sign In
+                </button>
+                
+                <button onclick="showSignup()" class="w-full border-2 border-green-500 text-green-600 py-3 rounded-xl font-semibold hover:bg-green-50 transition-all duration-300">
+                    Create New Account
+                </button>
+                
+                <div class="text-center mt-6 text-gray-500 text-sm">
+                    🌾 Empowering farmers with smart technology 🌾
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Page -->
+        <div id="signupPage" class="page hidden animate-fade-in">
+            <div class="bg-gradient-green h-32 relative">
+                <button onclick="showLogin()" class="absolute top-4 left-4 text-white text-2xl">←</button>
+                <div class="text-center pt-8">
+                    <h2 class="text-white text-xl font-bold">Create Account</h2>
+                </div>
+            </div>
+            
+            <div class="px-6 py-6">
+                <div class="mb-4">
+                    <input type="text" placeholder="Full Name" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div class="mb-4">
+                    <input type="text" placeholder="Email / Mobile" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div class="mb-4">
+                    <input type="password" placeholder="Password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div class="mb-6">
+                    <input type="password" placeholder="Confirm Password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                
+                <button onclick="signup()" class="w-full bg-gradient-green text-white py-3 rounded-xl font-semibold shadow-soft">
+                    Sign Up
+                </button>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profilePage" class="page hidden animate-fade-in">
+            <div class="bg-gradient-green h-32 relative">
+                <button onclick="showDashboard()" class="absolute top-4 left-4 text-white text-2xl">←</button>
+                <div class="text-center pt-8">
+                    <h2 class="text-white text-xl font-bold">Farmer Profile</h2>
+                </div>
+            </div>
+            
+            <div class="px-6 py-6">
+                <div class="bg-white rounded-2xl shadow-soft p-6 mb-6">
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-3xl">👨‍🌾</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">Profile Information</h3>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xl">👤</span>
+                            <input type="text" id="farmerName" placeholder="Full Name" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xl">🏞️</span>
+                            <input type="number" id="landAcres" placeholder="Acres of Land" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xl">📍</span>
+                            <input type="text" id="location" placeholder="Village, District, State" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xl">🌱</span>
+                            <select id="soilType" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option value="">Select Soil Type</option>
+                                <option value="clay">Clay Soil</option>
+                                <option value="sandy">Sandy Soil</option>
+                                <option value="loamy">Loamy Soil</option>
+                                <option value="silt">Silt Soil</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xl">🌾</span>
+                            <input type="text" id="cropHistory" placeholder="Previous Crops Grown" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xl">💧</span>
+                            <select id="waterSource" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option value="">Water Source</option>
+                                <option value="rainfed">Rainfed</option>
+                                <option value="irrigated">Irrigated</option>
+                                <option value="mixed">Mixed</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button onclick="saveProfile()" class="w-full bg-gradient-green text-white py-3 rounded-xl font-semibold mt-6 shadow-soft">
+                        Save Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="page hidden animate-fade-in">
+            <div class="bg-gradient-green h-40 relative">
+                <div class="px-6 pt-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h2 class="text-white text-xl font-bold">Welcome, Farmer!</h2>
+                            <p class="text-green-100 text-sm">Your farming assistant</p>
+                        </div>
+                        <button onclick="showProfile()" class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                            <span class="text-white text-xl">👤</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="px-6 py-6 -mt-8">
+                <div class="grid grid-cols-2 gap-4">
+                    <div onclick="showChatbot()" class="bg-white rounded-2xl p-4 shadow-soft hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <div class="text-3xl mb-2">🌱</div>
+                        <h3 class="font-semibold text-gray-800 text-sm mb-1">Crop Advisory</h3>
+                        <p class="text-gray-600 text-xs">AI-based guidance</p>
+                    </div>
+                    
+                    <div onclick="showFeature('soil')" class="bg-white rounded-2xl p-4 shadow-soft hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <div class="text-3xl mb-2">🧪</div>
+                        <h3 class="font-semibold text-gray-800 text-sm mb-1">Soil Health</h3>
+                        <p class="text-gray-600 text-xs">Fertilizer guidance</p>
+                    </div>
+                    
+                    <div onclick="showFeature('weather')" class="bg-white rounded-2xl p-4 shadow-soft hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <div class="text-3xl mb-2">☁️</div>
+                        <h3 class="font-semibold text-gray-800 text-sm mb-1">Weather Alerts</h3>
+                        <p class="text-gray-600 text-xs">Predictive insights</p>
+                    </div>
+                    
+                    <div onclick="showFeature('pest')" class="bg-white rounded-2xl p-4 shadow-soft hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <div class="text-3xl mb-2">🐛</div>
+                        <h3 class="font-semibold text-gray-800 text-sm mb-1">Pest Detection</h3>
+                        <p class="text-gray-600 text-xs">Image upload</p>
+                    </div>
+                    
+                    <div onclick="showFeature('market')" class="bg-white rounded-2xl p-4 shadow-soft hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <div class="text-3xl mb-2">📈</div>
+                        <h3 class="font-semibold text-gray-800 text-sm mb-1">Market Prices</h3>
+                        <p class="text-gray-600 text-xs">Live tracking</p>
+                    </div>
+                    
+                    <div onclick="showChatbot()" class="bg-white rounded-2xl p-4 shadow-soft hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <div class="text-3xl mb-2">🎙️</div>
+                        <h3 class="font-semibold text-gray-800 text-sm mb-1">Voice Support</h3>
+                        <p class="text-gray-600 text-xs">Speak your query</p>
+                    </div>
+                </div>
+                
+                <div class="mt-6 bg-white rounded-2xl p-4 shadow-soft">
+                    <h3 class="font-semibold text-gray-800 mb-3">Quick Tips</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center space-x-3 p-2 bg-green-50 rounded-lg">
+                            <span class="text-lg">🌧️</span>
+                            <p class="text-sm text-gray-700">Rain expected tomorrow - prepare your fields</p>
+                        </div>
+                        <div class="flex items-center space-x-3 p-2 bg-yellow-50 rounded-lg">
+                            <span class="text-lg">🌡️</span>
+                            <p class="text-sm text-gray-700">Temperature rising - increase irrigation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chatbot Page -->
+        <div id="chatbotPage" class="page hidden animate-fade-in">
+            <div class="bg-gradient-green h-32 relative">
+                <button onclick="showDashboard()" class="absolute top-4 left-4 text-white text-2xl">←</button>
+                <div class="text-center pt-8">
+                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span class="text-xl">🤖</span>
+                    </div>
+                    <h2 class="text-white text-lg font-bold">Agri Assistant</h2>
+                </div>
+            </div>
+            
+            <div class="flex flex-col h-96">
+                <div id="chatMessages" class="flex-1 px-4 py-4 overflow-y-auto space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                            <span class="text-sm">🤖</span>
+                        </div>
+                        <div class="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs">
+                            <p class="text-sm text-gray-800">Hello! I'm your farming assistant. How can I help you today?</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="px-4 py-4 border-t border-gray-200">
+                    <div class="flex items-center space-x-2 mb-3">
+                        <select id="chatLanguage" class="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="en">English</option>
+                            <option value="hi">हिंदी</option>
+                            <option value="gu">ગુજરાતી</option>
+                        </select>
+                        <button id="ttsToggle" onclick="toggleTTS()" class="px-3 py-1 bg-green-100 text-green-600 rounded-lg text-sm font-medium">
+                            🔊 TTS: ON
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2">
+                        <input type="text" id="chatInput" placeholder="Type your question..." class="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <button id="voiceBtn" onclick="toggleVoiceInput()" class="w-12 h-12 bg-green-500 text-white rounded-xl flex items-center justify-center hover:bg-green-600 transition-colors">
+                            <span class="text-lg">🎤</span>
+                        </button>
+                        <button onclick="sendMessage()" class="w-12 h-12 bg-green-500 text-white rounded-xl flex items-center justify-center hover:bg-green-600 transition-colors">
+                            <span class="text-lg">➤</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Detail Page -->
+        <div id="featurePage" class="page hidden animate-fade-in">
+            <div class="bg-gradient-green h-32 relative">
+                <button onclick="showDashboard()" class="absolute top-4 left-4 text-white text-2xl">←</button>
+                <div class="text-center pt-8">
+                    <h2 id="featureTitle" class="text-white text-xl font-bold">Feature</h2>
+                </div>
+            </div>
+            
+            <div class="px-6 py-6">
+                <div id="featureContent" class="bg-white rounded-2xl shadow-soft p-6">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 'loginPage';
+        let ttsEnabled = true;
+        let isListening = false;
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+            currentPage = pageId;
+        }
+
+        function showLogin() { showPage('loginPage'); }
+        function showSignup() { showPage('signupPage'); }
+        function showDashboard() { showPage('dashboardPage'); }
+        function showProfile() { showPage('profilePage'); }
+        function showChatbot() { showPage('chatbotPage'); }
+
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (email && password) {
+                showDashboard();
+            } else {
+                alert('Please enter email and password');
+            }
+        }
+
+        function signup() {
+            // Simple validation
+            showDashboard();
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('farmerName').value;
+            if (name) {
+                alert('Profile saved successfully!');
+                showDashboard();
+            } else {
+                alert('Please enter your name');
+            }
+        }
+
+        function showFeature(featureType) {
+            showPage('featurePage');
+            
+            const featureData = {
+                soil: {
+                    title: '🧪 Soil Health Analysis',
+                    content: `
+                        <div class="text-center mb-6">
+                            <div class="text-6xl mb-4">🧪</div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Soil Health Analysis</h3>
+                            <p class="text-gray-600">Get detailed soil analysis and fertilizer recommendations</p>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-green-50 rounded-xl">
+                                <h4 class="font-semibold text-green-800 mb-2">Current Soil Status</h4>
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div>pH Level: <span class="font-semibold">6.8</span></div>
+                                    <div>Nitrogen: <span class="font-semibold text-yellow-600">Low</span></div>
+                                    <div>Phosphorus: <span class="font-semibold text-green-600">Good</span></div>
+                                    <div>Potassium: <span class="font-semibold text-green-600">Good</span></div>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-blue-50 rounded-xl">
+                                <h4 class="font-semibold text-blue-800 mb-2">Recommendations</h4>
+                                <ul class="text-sm space-y-1">
+                                    <li>• Apply nitrogen-rich fertilizer</li>
+                                    <li>• Consider organic compost</li>
+                                    <li>• Test again in 3 months</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `
+                },
+                weather: {
+                    title: '☁️ Weather Forecast',
+                    content: `
+                        <div class="text-center mb-6">
+                            <div class="text-6xl mb-4">☁️</div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Weather Forecast</h3>
+                            <p class="text-gray-600">7-day weather prediction for your area</p>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-blue-50 rounded-xl">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🌧️</span>
+                                    <div>
+                                        <div class="font-semibold">Today</div>
+                                        <div class="text-sm text-gray-600">Heavy Rain Expected</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold">28°C</div>
+                                    <div class="text-sm text-gray-600">85% humidity</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-xl">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">☀️</span>
+                                    <div>
+                                        <div class="font-semibold">Tomorrow</div>
+                                        <div class="text-sm text-gray-600">Sunny & Clear</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold">32°C</div>
+                                    <div class="text-sm text-gray-600">60% humidity</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-3 bg-orange-50 rounded-xl">
+                            <h4 class="font-semibold text-orange-800 mb-2">⚠️ Alert</h4>
+                            <p class="text-sm text-orange-700">Heavy rainfall expected. Ensure proper drainage in your fields.</p>
+                        </div>
+                    `
+                },
+                pest: {
+                    title: '🐛 Pest Detection',
+                    content: `
+                        <div class="text-center mb-6">
+                            <div class="text-6xl mb-4">🐛</div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Pest & Disease Detection</h3>
+                            <p class="text-gray-600">Upload crop images for AI-powered analysis</p>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
+                                <div class="text-4xl mb-4">📷</div>
+                                <p class="text-gray-600 mb-4">Take a photo of affected crop</p>
+                                <button class="bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors">
+                                    Upload Image
+                                </button>
+                            </div>
+                            <div class="p-4 bg-red-50 rounded-xl">
+                                <h4 class="font-semibold text-red-800 mb-2">Recent Detection</h4>
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🐛</span>
+                                    <div>
+                                        <div class="font-semibold">Aphid Infestation</div>
+                                        <div class="text-sm text-gray-600">Detected 2 days ago</div>
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-sm">
+                                    <strong>Treatment:</strong> Apply neem oil spray in early morning
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                market: {
+                    title: '📈 Market Prices',
+                    content: `
+                        <div class="text-center mb-6">
+                            <div class="text-6xl mb-4">📈</div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Market Price Tracking</h3>
+                            <p class="text-gray-600">Live prices from nearby markets</p>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🌾</span>
+                                    <div>
+                                        <div class="font-semibold">Wheat</div>
+                                        <div class="text-sm text-gray-600">Per Quintal</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-green-600">₹2,150</div>
+                                    <div class="text-sm text-green-600">↑ +50</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-xl">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🌽</span>
+                                    <div>
+                                        <div class="font-semibold">Corn</div>
+                                        <div class="text-sm text-gray-600">Per Quintal</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-yellow-600">₹1,850</div>
+                                    <div class="text-sm text-gray-600">→ 0</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-red-50 rounded-xl">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">🍅</span>
+                                    <div>
+                                        <div class="font-semibold">Tomato</div>
+                                        <div class="text-sm text-gray-600">Per Kg</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-red-600">₹25</div>
+                                    <div class="text-sm text-red-600">↓ -5</div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+
+            const feature = featureData[featureType];
+            document.getElementById('featureTitle').textContent = feature.title;
+            document.getElementById('featureContent').innerHTML = feature.content;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, 'user');
+                input.value = '';
+                
+                // Simulate bot response
+                setTimeout(() => {
+                    const responses = [
+                        "Based on your location and soil type, I recommend planting wheat in the next 2 weeks.",
+                        "The weather forecast shows good conditions for irrigation. Consider watering your crops tomorrow morning.",
+                        "Your soil analysis indicates low nitrogen levels. I suggest applying organic fertilizer.",
+                        "Market prices for your crops are currently favorable. Consider harvesting soon."
+                    ];
+                    const response = responses[Math.floor(Math.random() * responses.length)];
+                    addMessage(response, 'bot');
+                    
+                    if (ttsEnabled) {
+                        speakText(response);
+                    }
+                }, 1000);
+            }
+        }
+
+        function addMessage(message, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-3 justify-end">
+                        <div class="bg-green-500 text-white rounded-2xl rounded-tr-sm px-4 py-3 max-w-xs">
+                            <p class="text-sm">${message}</p>
+                        </div>
+                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                            <span class="text-sm">👤</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                            <span class="text-sm">🤖</span>
+                        </div>
+                        <div class="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs">
+                            <p class="text-sm text-gray-800">${message}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function toggleTTS() {
+            ttsEnabled = !ttsEnabled;
+            const button = document.getElementById('ttsToggle');
+            button.textContent = ttsEnabled ? '🔊 TTS: ON' : '🔇 TTS: OFF';
+            button.className = ttsEnabled ? 
+                'px-3 py-1 bg-green-100 text-green-600 rounded-lg text-sm font-medium' :
+                'px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium';
+        }
+
+        function toggleVoiceInput() {
+            const voiceBtn = document.getElementById('voiceBtn');
+            
+            if (!isListening) {
+                isListening = true;
+                voiceBtn.classList.add('speaking');
+                voiceBtn.innerHTML = '<span class="text-lg">🔴</span>';
+                
+                // Simulate voice recognition
+                setTimeout(() => {
+                    const sampleQueries = [
+                        "What fertilizer should I use for wheat?",
+                        "When is the best time to plant tomatoes?",
+                        "How much water do my crops need?",
+                        "What are the current market prices?"
+                    ];
+                    const query = sampleQueries[Math.floor(Math.random() * sampleQueries.length)];
+                    document.getElementById('chatInput').value = query;
+                    
+                    isListening = false;
+                    voiceBtn.classList.remove('speaking');
+                    voiceBtn.innerHTML = '<span class="text-lg">🎤</span>';
+                }, 2000);
+            }
+        }
+
+        function speakText(text) {
+            // Simulate text-to-speech
+            console.log('Speaking:', text);
+        }
+
+        // Handle Enter key in chat input
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Initialize app
+        showLogin();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'981e4e0865cc1432',t:'MTc1ODMzOTY2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
